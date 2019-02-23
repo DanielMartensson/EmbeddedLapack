@@ -1,0 +1,46 @@
+#include <time.h>
+#include "LinearAlgebra/declareFunctions.h"
+
+int main( )
+{
+    clock_t start, end;
+	float cpu_time_used;
+	start = clock();
+	
+
+	/*
+	 * A matrix 3x3 - Need to be square
+	 */
+	double A[3*3] = {3, 4, 1,
+					6, 10, 2,
+					5, 3, 2
+	};
+
+
+	/*
+	 * Solution 3x4
+	 */
+	double X[3*4];
+
+	/*
+	 * B matrix 3x4
+	 */
+	double B[3*4] = {4, 3, 22, 5,
+					5, 3, 2, 5,
+					3, 4, 5, 3};
+
+	/*
+	 * Solve
+	 */
+	linsolve(A, X, B, 3, 4); // 3 = A row, 4 = B column
+
+	/*
+	 * Print solution
+	 */
+	print(X, 3, 4);
+	
+	end = clock();
+	cpu_time_used = ((float) (end - start)) / CLOCKS_PER_SEC;
+	printf("\nTotal speed  was %f,", cpu_time_used);
+    return 0;
+}
