@@ -10,7 +10,7 @@
 		http://www.netlib.org/f2c/libf2c.zip
 */
 
-#include "f2c.h"
+#include "../../Lapack/Include/f2c.h"
 
 
 /* Subroutine */ int dgesv_(integer *n, integer *nrhs, doublereal *a, integer 
@@ -21,7 +21,7 @@
 
     /* Local variables */
     extern /* Subroutine */ int dgetrf_(integer *, integer *, doublereal *, 
-	    integer *, integer *, integer *), xerbla_(char *, integer *), dgetrs_(char *, integer *, integer *, doublereal *, 
+	    integer *, integer *, integer *, double *), xerbla_(char *, integer *), dgetrs_(char *, integer *, integer *, doublereal *, 
 	    integer *, integer *, doublereal *, integer *, integer *);
 
 
@@ -122,8 +122,8 @@
     }
 
 /*     Compute the LU factorization of A. */
-
-    dgetrf_(n, n, &a[a_offset], lda, &ipiv[1], info);
+    double IPIV_d[(int) *n]; // this was added 2019 due to memory loss of ipiv when using LU.c file
+    dgetrf_(n, n, &a[a_offset], lda, &ipiv[1], info, IPIV_d);
     if (*info == 0) {
 
 /*        Solve the system A*X = B, overwriting B with X. */

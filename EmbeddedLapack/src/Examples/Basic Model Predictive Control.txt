@@ -15,13 +15,13 @@
 #define column_c 2 // C column, the same column as A
 
 /*
- * Create a state space model
+ * Create a state space model - discrete
  */
-double A[row_a * column_a] = { 0, 1,
-							  -3, -2};
+double A[row_a * column_a] = { -0.099272, 0.029481,
+		-0.088444, -0.158234};
 
-double B[row_b * column_b] = { 0,
-								1
+double B[row_b * column_b] = { 0.366424,
+							   0.029481
 };
 
 double C[row_c * column_c] = {1, 0};
@@ -33,10 +33,10 @@ double X[row_a] = {0, 0};
 double R =  6;
 
 // Create the length of the observability matrix, notice it will have the dimension (row_o * row_c + row_c) x column_b
-#define row_o 30
+#define row_o 20
 
 // Create the widt of the lower triangular toeplitz H matrix, notice that it will have the dimension (row_o * row_c + row_c) x (column_h * column_b)
-#define column_h 29 // column_h < row_o - always!
+#define column_h 19 // column_h < row_o - always!
 
 // Define the column of the reference vector - Standard is 1
 #define column_ry 1
@@ -102,7 +102,7 @@ int main() {
 
 	double Ry[(row_o * row_c)*column_ry];
 	ones(Ry, row_o * row_c, column_ry);
-	scale(Ry, R/2, row_o * row_c, column_ry); // Ry*R = Ry (R need to be divided with 2)
+	scale(Ry, R, row_o * row_c, column_ry); // Ry*R = Ry
 
 	double OX[(row_o * row_c)*column_ry];
 	mul(O, X, false, OX, row_o * row_c, row_a, column_ry); // O*X

@@ -10,7 +10,7 @@
 		http://www.netlib.org/f2c/libf2c.zip
 */
 
-#include "f2c.h"
+#include "../../Lapack/Include/f2c.h"
 
 
 /* Subroutine */ int strmm_(char *side, char *uplo, char *transa, char *diag, 

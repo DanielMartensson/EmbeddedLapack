@@ -2317,7 +2317,7 @@ doublereal clantr_(char *norm, char *uplo, char *diag, integer *m, integer *n,
 	lda, integer *ipiv, integer *info);
 
 /* Subroutine */ int dgetrf_(integer *m, integer *n, doublereal *a, integer *
-	lda, integer *ipiv, integer *info);
+	lda, integer *ipiv, integer *info, double* IPIV_d); // I've added IPIV_d
 
 /* Subroutine */ int dgetri_(integer *n, doublereal *a, integer *lda, integer 
 	*ipiv, doublereal *work, integer *lwork, integer *info);

@@ -1,4 +1,4 @@
-/* f2c.h  --  Standard Fortran to C header file */
+/* ../../src/Lapack/Include/f2c.h  --  Standard Fortran to C header file */
 
 /**  barf  [ba:rf]  2.  "He suggested using FORTRAN, and everybody barfed."
 

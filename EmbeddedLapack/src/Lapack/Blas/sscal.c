@@ -10,7 +10,7 @@
 		http://www.netlib.org/f2c/libf2c.zip
 */
 
-#include "f2c.h"
+#include "../../Lapack/Include/f2c.h"
 
 
 /* Subroutine */ int sscal_(integer *n, real *sa, real *sx, integer *incx)

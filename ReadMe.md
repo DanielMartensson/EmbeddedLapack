@@ -13,22 +13,21 @@ This C-library using Lapack subroutines from Lapack version 3.2.1 and I have cha
 * Follows MATLAB commands as much as it can
 * Can be used with a compiler as low as C99 standard, default is C11
 * Simple use for most common matrix algebra
-* Using Lapack subroutines
+* Using minimal but necessary Lapack subroutines as possible due to the small amout of flash memory it will be loaded into.
 
 ## Tested on without any compile errors
-* Windows 7 MinGW 64 bi
+* Windows 7 MinGW 64 bit
 * Ubuntu Linux GCC 64 bit
 * Raspberry Pi B+ GCC-ARM 32 bit
+* STM32 GCC-ARM-Atollic 32 bit
 
 ## Installation for testing and buildning your matrix algebra
 
-Step 1: Download EmbeddedLapack.zip
+Step 1: Download EmbeddedLapack folder
 
-Step 2: Extract EmbeddedLapack.zip
+Step 2: Open EmbeddedLapack and go to Debug folder
 
-Step 3: Open EmbeddedLapack and go to Debug folder
-
-Step 4:
+Step 3:
 Write this to compile
 ```
 make clean
@@ -36,17 +35,15 @@ make
 ```
 
 ## Installation to an embedded target
-Step 1: Download EmbeddedLapack.zip
+Step 1: Download EmbeddedLapack folder
 
-Step 2: Extract EmbeddedLapack.zip
+Step 2: Move the folders "Lapack" and "LinearAlgebra" from the folder EmbeddedLapack -> src, to the same folder as your main.c file is located.
 
-Step 3: Move the folders "Lapack" and "LinearAlgebra" from the folder EmbeddedLapack -> src, to the same folder as your main.c file is located.
-
-Step 4: Link "-lm" like this.
+Step 3: Link "-lm" like this.
 
 ![](https://raw.githubusercontent.com/DanielMartensson/EmbeddedLapack/master/Markering_006.png)
 
-Step 6: Paste in "#include "LinearAlgebra/declareFunctions.h"" in top of your main.c file
+Step 4: Paste in "#include "LinearAlgebra/declareFunctions.h"" in top of your main.c file
 
 ![](https://raw.githubusercontent.com/DanielMartensson/EmbeddedLapack/master/Markering_008.png)
 
@@ -319,7 +316,8 @@ int main( ) {
 	double A[5*4] = {2, 7, 6, 2,
 			 9, 5, 1, 3,
 			 4, 3, 8, 4,
-			 5, 6, 7, 8
+			 5, 6, 7, 8,
+			 2, 2, -3,-1
 	};
 
 	double U[4*4];
@@ -514,13 +512,13 @@ Given a state space model and a reference point, this example can compute your b
 #define column_c 2 // C column, the same column as A
 
 /*
- * Create a state space model
+ * Create a state space model - discrete
  */
-double A[row_a * column_a] = { 0, 1,
-			     -3, -2};
+double A[row_a * column_a] = { -0.099272, 0.029481,
+		               -0.088444, -0.158234};
 
-double B[row_b * column_b] = { 0,
-			       1
+double B[row_b * column_b] = { 0.366424,
+			       0.029481
 };
 
 double C[row_c * column_c] = {1, 0};
@@ -532,10 +530,10 @@ double X[row_a] = {0, 0};
 double R =  6;
 
 // Create the length of the observability matrix, notice it will have the dimension (row_o * row_c + row_c) x column_b
-#define row_o 30
+#define row_o 20
 
 // Create the widt of the lower triangular toeplitz H matrix, notice that it will have the dimension (row_o * row_c + row_c) x (column_h * column_b)
-#define column_h 29 // column_h < row_o - always!
+#define column_h 19 // column_h < row_o - always!
 
 // Define the column of the reference vector - Standard is 1
 #define column_ry 1
@@ -577,10 +575,10 @@ int main() {
 	 * Create the lower triangular toeplitz matrix
 	 */
 	double H[(row_o * row_c) * (column_h * column_b)];
-        zeros(H, row_o * row_c, column_h * column_b);
+    zeros(H, row_o * row_c, column_h * column_b);
 
 	// T = O_*B - Observabillity matrix times B
-        double T[(row_o * row_c) * column_b];
+    double T[(row_o * row_c) * column_b];
 	mul(O_, B, false, T, row_o * row_c, row_a, column_b);
 
 
@@ -601,7 +599,7 @@ int main() {
 
 	double Ry[(row_o * row_c)*column_ry];
 	ones(Ry, row_o * row_c, column_ry);
-	scale(Ry, R/2, row_o * row_c, column_ry); // Ry*R = Ry (R need to be divided with 2)
+	scale(Ry, R, row_o * row_c, column_ry); // Ry*R = Ry
 
 	double OX[(row_o * row_c)*column_ry];
 	mul(O, X, false, OX, row_o * row_c, row_a, column_ry); // O*X
@@ -662,5 +660,6 @@ void cut(double* A, int row, int column, double* B, int start_row, int stop_row,
 
 
 ## How can you help and build on this library?
-Download the clapack.tgz file above, or from here http://www.netlib.org/clapack/. Extract it. Then you can copy and paste the files into the subfolders of folder "Lapack" from the EmbeddedLapack.zip -> src file, so you can have your desire Lapack subroutine to work. You can see how I have done. Just do the same. I just include the Lapack routine I want to use, and then I got lots of errors in the compiling and those errors asking for functions from other .c files located from clapack.tgz file. I copy and paste functions until all errors where gone. 
+Download the clapack.tgz file above, or from here http://www.netlib.org/clapack/. Extract it. Then you can copy and paste the files into the subfolders of folder "Lapack" from the EmbeddedLapack -> src folder, so you can have your desire Lapack subroutine to work. You can see how I have done. Just do the same. I just include the Lapack routine I want to use, and then I got lots of errors in the compiling and those errors asking for functions from other .c files located from clapack.tgz file. I copy and paste functions until all errors where gone. 
+
 

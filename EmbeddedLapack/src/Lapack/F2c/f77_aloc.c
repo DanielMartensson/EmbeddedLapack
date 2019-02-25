@@ -1,4 +1,4 @@
-#include "f2c.h"
+#include "../../Lapack/Include/f2c.h"
 #undef abs
 #undef min
 #undef max

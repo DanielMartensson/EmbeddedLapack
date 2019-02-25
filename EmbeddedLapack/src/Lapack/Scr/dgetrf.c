@@ -10,7 +10,7 @@
 		http://www.netlib.org/f2c/libf2c.zip
 */
 
-#include "f2c.h"
+#include "../../Lapack/Include/f2c.h"
 
 /* Table of constant values */
 
@@ -20,7 +20,7 @@ static doublereal c_b16 = 1.;
 static doublereal c_b19 = -1.;
 
 /* Subroutine */ int dgetrf_(integer *m, integer *n, doublereal *a, integer *
-	lda, integer *ipiv, integer *info)
+	lda, integer *ipiv, integer *info, double* IPIV_d)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1, i__2, i__3, i__4, i__5;
@@ -211,6 +211,10 @@ static doublereal c_b19 = -1.;
 /* L20: */
 	}
     }
+	
+    // Add to IPIV_d due to memory loss from ipiv when using LU.c file. 
+    for(int i = 1; i <= min(*m, *n); i++)
+	IPIV_d[i] = (double) ipiv[i];
 
     return 0;
 

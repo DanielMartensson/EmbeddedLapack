@@ -1,4 +1,4 @@
-#include "f2c.h"
+#include "../../Lapack/Include/f2c.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -1,10 +1,11 @@
 #include <time.h>
 #include "LinearAlgebra/declareFunctions.h"
 
-int main( ) {
+
+int main() {
 
 	/*
-	 * Main template
+	 * Standard template
 	 */
 
 	clock_t start, end;
@@ -12,8 +13,8 @@ int main( ) {
 	start = clock();
 
 	/*
-	 * Enter your code here
-	 */
+         * Enter your code here
+         */
 
 	end = clock();
 	cpu_time_used = ((float) (end - start)) / CLOCKS_PER_SEC;

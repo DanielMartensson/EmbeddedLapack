@@ -14,7 +14,8 @@
 void lu(double* A, double* L, double* U, double* P, int row, int column) {
 
 	/*
-	 * Solve PA = LU
+	 * Solve PA = LU - Same as MATLAB/Octave
+	 * Normally, this subroutine compute A = PLU, but it's much better to follow the "MATLAB/Octave"-standard.
 	 */
 
 	integer M = row;
@@ -23,43 +24,93 @@ void lu(double* A, double* L, double* U, double* P, int row, int column) {
 	memcpy(A_, A, row * column * sizeof(double));
 	tran(A_, row, column); // Important!
 	integer LDA = row;
-	integer IPIV[row];
+	integer IPIV[max(row, column)];
+	double IPIV_d[max(row, column)];
 	integer INFO;
 
 	// Solve!
-	dgetrf_(&M, &N, A_, &LDA, IPIV, &INFO); // Added IPIV_d as last argument
+	dgetrf_(&M, &N, A_, &LDA, IPIV, &INFO, IPIV_d); // I've change the dgetrf so it will return a IPIV vector of doubles, due to memory loss.
 
 	// Important
 	tran(A_, column, row);
 
-	// Create the L matrix
-	memset(L, 0, row * column * sizeof(float));
-	for (int i = 0; i < row; i++) {
-		for (int j = 0; j < column; j++) {
-			// This will create a lower triangular matrix.
-			if (j < i) {
-				*((L + i * (row - (row - column))) + j) = *((A_
-						+ i * (row - (row - column))) + j); // Lower traingular of A_
-			} else if (j == i)
-				*((L + i * (row - (row - column))) + j) = 1; // Only on diagonal
+	if (column > row) {
+
+		// Create U matrix
+		memset(U, 0, row * column * sizeof(double));
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < column; j++) {
+				// This will create a upper triangular matrix.
+				if (j >= i) {
+					*((U + i * (row - (row - column))) + j) = *((A_
+							+ i * (row - (row - column))) + j); // Lower traingular of A_
+				}
+			}
 		}
+
+		// Create the L matrix
+		memset(L, 0, row * min(row, column) * sizeof(double));
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < column; j++) {
+				// This will create a lower triangular matrix.
+				if (j < i) {
+					*((L + i * (row)) + j) = *((A_ + i * (row - (row - column)))
+							+ j); // Lower traingular of A_
+				} else if (j == i)
+					*((L + i * (row)) + j) = 1; // Only on diagonal
+			}
+		}
+
+	} else {
+
+		// Create U matrix
+		triu(A_, U, 0, column, column);
+
+		// Create the L matrix
+		memset(L, 0, row * column * sizeof(double));
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < column; j++) {
+				// This will create a lower triangular matrix.
+				if (j < i) {
+					*((L + i * (row - (row - column))) + j) = *((A_
+							+ i * (row - (row - column))) + j); // Lower traingular of A_
+				} else if (j == i)
+					*((L + i * (row - (row - column))) + j) = 1; // Only on diagonal
+			}
+		}
+
 	}
 
+	/*
+	 * Insert all values 1 to row to our IPIV integer vector
+	 */
+	for (int i = 0; i < row; i++)
+		IPIV[i] = i + 1;
 
-	// Create U matrix
-	triu(A_, U, 0, column, column);
+	/*
+	 * Change the IPIV - Swap the values
+	 */
 
-	// Find the Pivot matrix from PA = LU -> P = LU*pinv(A), where A = P_
-	double P_[row*column];
-	double LU[row*column];
-	mul(L, U, false, LU, row, column, column); // LU = L*U
-	copy(A, P_, row, column); // A -> P_
-	pinv(P_, row, column); // pseudo inverse of P_
-	mul(LU, P_, false, P, row, column, row); // P_ have the size column x row after pseudo inverse
+	for (int i = 1; i <= min(row, column); i++) {
+		int temp = IPIV[(int) IPIV_d[i] - 1]; // the IPIV_d have values from index 1 to index column, that's why - 1
+		//printf("IPIV %d\n", IPIV[i-1]); // test it!
+		IPIV[(int) IPIV_d[i] - 1] = IPIV[i - 1];
+		IPIV[i - 1] = temp;
+	}
 
-	// We need to round P
-	for(int i = 0; i < row*row; i++)
-		*(P+i) = round(*(P+i));
+	// Find the permutation matrix P
+	eye(P, row, row); // Turn P into a diagonal matrix
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < row; j++) {
+			double swap1 = *(P + i * row + j);
+			double swap2 = *(P + i * row + ((int) IPIV[i]) - 1);
+
+			// Swap it!
+			*(P + i * row + j) = swap2;
+			*(P + i * row + ((int) IPIV[i]) - 1) = swap1;
+			i++;
+		}
+	}
 
 }
 
