@@ -18,7 +18,7 @@ This C-library using Lapack subroutines from Lapack version 3.2.1 and I have cha
 ## Tested on without any compile errors
 * Windows 7 MinGW 64 bit
 * Ubuntu Linux GCC 64 bit
-* Raspberry Pi B+ GCC-ARM 32 bit
+* Raspberry Pi B+/Zero W GCC-ARM 32 bit
 * STM32 GCC-ARM-Atollic 32 bit
 
 ## Installation for testing and buildning your matrix algebra
