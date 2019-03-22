@@ -650,7 +650,6 @@ Finished building target: EmbeddedLapack
 int main() {
 
 	/*
-	 * G(s) = 1/(s^2 + 1s + 3)  - Model
 	 * y = measured output values
 	 * u = measured input values
 	 */
@@ -861,7 +860,7 @@ int main() {
 	mat H1_half(72, 72);
 
 	/*
-	 * G(s) = 4/(2s^2 + s + 5) - Model
+	 * Step singal
 	 */
 
 	double output[144] = { 0.00000, 0.49525, 1.43863, 2.13779, 2.30516, 2.05713,
