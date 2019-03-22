@@ -936,7 +936,7 @@ int main() {
 
 	svd(U, s, V, H1_half);
 
-	s.print("s-matrix: "); // <--- Why does this U is not as same as the "u" from svd at the MATLAB code below?
+	s.print("s-matrix: "); 
 
 	end = clock();
 	cpu_time_used = ((float) (end - start)) / CLOCKS_PER_SEC;
