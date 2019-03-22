@@ -623,6 +623,410 @@ int main() {
 	return 0;
 }
 ```
+## Simulation between EmbeddedLapack (C) and Armadillo (C++)
+Here is a simulation of a step response that turning into an impulse response. Then we take the SVD of that impulse response.
+
+### EmbeddedAlgebra
+```
+13:15:53 **** Incremental Build of configuration Debug for project EmbeddedLapack ****
+make all 
+Building file: ../src/main.c
+Invoking: Cross GCC Compiler
+gcc -std=c11 -O2 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/main.d" -MT"src/main.o" -o "src/main.o" "../src/main.c"
+Finished building: ../src/main.c
+ 
+Building target: EmbeddedLapack
+Invoking: Cross GCC Linker
+gcc  -o "EmbeddedLapack"  ./src/LinearAlgebra/add.o ./src/LinearAlgebra/chol.o ./src/LinearAlgebra/cofact.o ./src/LinearAlgebra/copy.o ./src/LinearAlgebra/cut.o ./src/LinearAlgebra/det.o ./src/LinearAlgebra/diag.o ./src/LinearAlgebra/diagpower.o ./src/LinearAlgebra/dot.o ./src/LinearAlgebra/eabs.o ./src/LinearAlgebra/eig.o ./src/LinearAlgebra/eye.o ./src/LinearAlgebra/hankel.o ./src/LinearAlgebra/horzcat.o ./src/LinearAlgebra/insert.o ./src/LinearAlgebra/inv.o ./src/LinearAlgebra/linsolve.o ./src/LinearAlgebra/lu.o ./src/LinearAlgebra/maxvector.o ./src/LinearAlgebra/mdiag.o ./src/LinearAlgebra/minvector.o ./src/LinearAlgebra/move.o ./src/LinearAlgebra/mpower.o ./src/LinearAlgebra/mul.o ./src/LinearAlgebra/norm.o ./src/LinearAlgebra/ones.o ./src/LinearAlgebra/pinv.o ./src/LinearAlgebra/power.o ./src/LinearAlgebra/print.o ./src/LinearAlgebra/qr.o ./src/LinearAlgebra/rank.o ./src/LinearAlgebra/repmat.o ./src/LinearAlgebra/scale.o ./src/LinearAlgebra/sqrte.o ./src/LinearAlgebra/sub.o ./src/LinearAlgebra/sumrows.o ./src/LinearAlgebra/svd.o ./src/LinearAlgebra/toeplitz.o ./src/LinearAlgebra/tran.o ./src/LinearAlgebra/tril.o ./src/LinearAlgebra/triu.o ./src/LinearAlgebra/vec.o ./src/LinearAlgebra/vertcat.o ./src/LinearAlgebra/zeros.o  ./src/Lapack/Scr/dbdsqr.o ./src/Lapack/Scr/dgebak.o ./src/Lapack/Scr/dgebal.o ./src/Lapack/Scr/dgebd2.o ./src/Lapack/Scr/dgebrd.o ./src/Lapack/Scr/dgeev.o ./src/Lapack/Scr/dgehd2.o ./src/Lapack/Scr/dgehrd.o ./src/Lapack/Scr/dgelq2.o ./src/Lapack/Scr/dgelqf.o ./src/Lapack/Scr/dgeqr2.o ./src/Lapack/Scr/dgeqrf.o ./src/Lapack/Scr/dgesv.o ./src/Lapack/Scr/dgesvd.o ./src/Lapack/Scr/dgetf2.o ./src/Lapack/Scr/dgetrf.o ./src/Lapack/Scr/dgetrs.o ./src/Lapack/Scr/dhseqr.o ./src/Lapack/Scr/disnan.o ./src/Lapack/Scr/dlabad.o ./src/Lapack/Scr/dlabrd.o ./src/Lapack/Scr/dlacpy.o ./src/Lapack/Scr/dladiv.o ./src/Lapack/Scr/dlaexc.o ./src/Lapack/Scr/dlahqr.o ./src/Lapack/Scr/dlahr2.o ./src/Lapack/Scr/dlaisnan.o ./src/Lapack/Scr/dlaln2.o ./src/Lapack/Scr/dlange.o ./src/Lapack/Scr/dlanv2.o ./src/Lapack/Scr/dlapy2.o ./src/Lapack/Scr/dlaqr0.o ./src/Lapack/Scr/dlaqr1.o ./src/Lapack/Scr/dlaqr2.o ./src/Lapack/Scr/dlaqr3.o ./src/Lapack/Scr/dlaqr4.o ./src/Lapack/Scr/dlaqr5.o ./src/Lapack/Scr/dlarf.o ./src/Lapack/Scr/dlarfb.o ./src/Lapack/Scr/dlarfg.o ./src/Lapack/Scr/dlarfp.o ./src/Lapack/Scr/dlarft.o ./src/Lapack/Scr/dlarfx.o ./src/Lapack/Scr/dlartg.o ./src/Lapack/Scr/dlas2.o ./src/Lapack/Scr/dlascl.o ./src/Lapack/Scr/dlaset.o ./src/Lapack/Scr/dlasq1.o ./src/Lapack/Scr/dlasq2.o ./src/Lapack/Scr/dlasq3.o ./src/Lapack/Scr/dlasq4.o ./src/Lapack/Scr/dlasq5.o ./src/Lapack/Scr/dlasq6.o ./src/Lapack/Scr/dlasr.o ./src/Lapack/Scr/dlasrt.o ./src/Lapack/Scr/dlassq.o ./src/Lapack/Scr/dlasv2.o ./src/Lapack/Scr/dlaswp.o ./src/Lapack/Scr/dlasy2.o ./src/Lapack/Scr/dorg2r.o ./src/Lapack/Scr/dorgbr.o ./src/Lapack/Scr/dorghr.o ./src/Lapack/Scr/dorgl2.o ./src/Lapack/Scr/dorglq.o ./src/Lapack/Scr/dorgqr.o ./src/Lapack/Scr/dorm2r.o ./src/Lapack/Scr/dormbr.o ./src/Lapack/Scr/dormhr.o ./src/Lapack/Scr/dorml2.o ./src/Lapack/Scr/dormlq.o ./src/Lapack/Scr/dormqr.o ./src/Lapack/Scr/dtrevc.o ./src/Lapack/Scr/dtrexc.o ./src/Lapack/Scr/ieeeck.o ./src/Lapack/Scr/iladlc.o ./src/Lapack/Scr/iladlr.o ./src/Lapack/Scr/ilaenv.o ./src/Lapack/Scr/ilaslc.o ./src/Lapack/Scr/ilaslr.o ./src/Lapack/Scr/iparmq.o ./src/Lapack/Scr/sgebak.o ./src/Lapack/Scr/sgebal.o ./src/Lapack/Scr/sgeev.o ./src/Lapack/Scr/sgehd2.o ./src/Lapack/Scr/sgehrd.o ./src/Lapack/Scr/sgeqr2.o ./src/Lapack/Scr/sgetf2.o ./src/Lapack/Scr/sgetrf.o ./src/Lapack/Scr/shseqr.o ./src/Lapack/Scr/sisnan.o ./src/Lapack/Scr/slabad.o ./src/Lapack/Scr/slacpy.o ./src/Lapack/Scr/sladiv.o ./src/Lapack/Scr/slaexc.o ./src/Lapack/Scr/slahqr.o ./src/Lapack/Scr/slahr2.o ./src/Lapack/Scr/slaisnan.o ./src/Lapack/Scr/slaln2.o ./src/Lapack/Scr/slange.o ./src/Lapack/Scr/slanv2.o ./src/Lapack/Scr/slapy2.o ./src/Lapack/Scr/slaqr0.o ./src/Lapack/Scr/slaqr1.o ./src/Lapack/Scr/slaqr2.o ./src/Lapack/Scr/slaqr3.o ./src/Lapack/Scr/slaqr4.o ./src/Lapack/Scr/slaqr5.o ./src/Lapack/Scr/slarf.o ./src/Lapack/Scr/slarfb.o ./src/Lapack/Scr/slarfg.o ./src/Lapack/Scr/slarfp.o ./src/Lapack/Scr/slarft.o ./src/Lapack/Scr/slarfx.o ./src/Lapack/Scr/slartg.o ./src/Lapack/Scr/slascl.o ./src/Lapack/Scr/slaset.o ./src/Lapack/Scr/slassq.o ./src/Lapack/Scr/slaswp.o ./src/Lapack/Scr/slasy2.o ./src/Lapack/Scr/sorg2r.o ./src/Lapack/Scr/sorghr.o ./src/Lapack/Scr/sorgqr.o ./src/Lapack/Scr/sorm2r.o ./src/Lapack/Scr/sormhr.o ./src/Lapack/Scr/sormqr.o ./src/Lapack/Scr/strevc.o ./src/Lapack/Scr/strexc.o  ./src/Lapack/Install/dlamch.o ./src/Lapack/Install/slamch.o  ./src/Lapack/F2c/d_lg10.o ./src/Lapack/F2c/d_sign.o ./src/Lapack/F2c/exit_.o ./src/Lapack/F2c/f77_aloc.o ./src/Lapack/F2c/i_nint.o ./src/Lapack/F2c/pow_dd.o ./src/Lapack/F2c/pow_di.o ./src/Lapack/F2c/pow_ri.o ./src/Lapack/F2c/r_lg10.o ./src/Lapack/F2c/r_sign.o ./src/Lapack/F2c/s_cat.o ./src/Lapack/F2c/s_cmp.o ./src/Lapack/F2c/s_copy.o  ./src/Lapack/Blas/daxpy.o ./src/Lapack/Blas/dcopy.o ./src/Lapack/Blas/ddot.o ./src/Lapack/Blas/dgemm.o ./src/Lapack/Blas/dgemv.o ./src/Lapack/Blas/dger.o ./src/Lapack/Blas/dnrm2.o ./src/Lapack/Blas/drot.o ./src/Lapack/Blas/dscal.o ./src/Lapack/Blas/dswap.o ./src/Lapack/Blas/dtrmm.o ./src/Lapack/Blas/dtrmv.o ./src/Lapack/Blas/dtrsm.o ./src/Lapack/Blas/idamax.o ./src/Lapack/Blas/isamax.o ./src/Lapack/Blas/lsame.o ./src/Lapack/Blas/saxpy.o ./src/Lapack/Blas/scopy.o ./src/Lapack/Blas/sdot.o ./src/Lapack/Blas/sgemm.o ./src/Lapack/Blas/sgemv.o ./src/Lapack/Blas/sger.o ./src/Lapack/Blas/snrm2.o ./src/Lapack/Blas/srot.o ./src/Lapack/Blas/sscal.o ./src/Lapack/Blas/sswap.o ./src/Lapack/Blas/strmm.o ./src/Lapack/Blas/strmv.o ./src/Lapack/Blas/strsm.o ./src/Lapack/Blas/xerbla.o  ./src/main.o   -lm
+Finished building target: EmbeddedLapack
+ 
+
+13:15:54 Build Finished. 0 errors, 0 warnings. (took 563ms)
+-------------------------------------------------------------------------------------------------
+#include <time.h>
+#include "LinearAlgebra/declareFunctions.h"
+
+
+int main() {
+
+	/*
+	 * G(s) = 1/(s^2 + 1s + 3)  - Model
+	 * y = measured output values
+	 * u = measured input values
+	 */
+
+	clock_t start, end;
+	float cpu_time_used;
+	start = clock();
+
+	double y[144] = { 0.00000, 0.49525, 1.43863, 2.13779, 2.30516, 2.05713,
+			1.69220, 1.45608, 1.42777, 1.54146, 1.67927, 1.75624, 1.75400,
+			1.70478, 1.65394, 1.62996, 1.63549, 1.65594, 1.67426, 1.68125,
+			1.67752, 1.66930, 1.66285, 1.66102, 1.66300, 1.66621, 1.66842,
+			1.66880, 1.66786, 1.66664, 1.66591, 1.66588, 1.66629, 1.66675,
+			1.66698, 1.66695, 1.66678, 1.66661, 1.66654, 1.66657, 1.66664,
+			1.66670, 1.66672, 1.66670, 1.66667, 1.66665, 1.66665, 1.66666,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66666, 1.66666,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667 };
+
+	double u[144] = { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+			5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+			5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+			5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+			5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+			5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+			5, 5, 5, 5, 5, 5, 5, 5, 5 };
+
+	// Toeplitz matrix
+	double toe[144 * 144];
+	toeplitz(u, toe, 144);
+
+	// Upper triangular
+	double tru[144 * 144];
+	triu(toe, tru, 0, 144, 144);
+
+	// inverse
+	inv(tru, 144);
+
+	// Multiplication
+	double g[144];
+	mul(y, tru, false, g, 1, 144, 144);
+
+	// Create hankel
+	double H0[144 * 144];
+	hankel(g, H0, 144, 1);
+	double H1[144 * 144];
+	hankel(g, H1, 144, 2);
+
+	// Cut hankel into half
+	double H0_half[72 * 72];
+	double H1_half[72 * 72];
+	cut(H0, 144, 144, H0_half, 0, 71, 0, 71);
+	cut(H1, 144, 144, H1_half, 0, 71, 0, 71);
+
+	// Do SVD
+	double U[72 * 72];
+	double S[72 * 72];
+	double V[72 * 72];
+	svd(H0_half, U, S, V, 72, 72);
+
+
+	/*
+	 * Collect all singular values
+	 */
+	double B[72*1];
+	mdiag(S, B, 72, 72);
+	print(B, 72, 1);
+
+	end = clock();
+	cpu_time_used = ((float) (end - start)) / CLOCKS_PER_SEC;
+	printf("\nTotal speed  was %f,", cpu_time_used);
+	return 0;
+}
+-----------------------------------------------------------------------------------------
+0.407681034422245847 
+0.238123608303610790 
+0.000011845213482911 
+0.000011666082457162 
+0.000008883438909084 
+0.000008631689698976 
+0.000007734962524526 
+0.000007511490842174 
+0.000007488406152694 
+0.000007407380025140 
+0.000006121475748177 
+0.000005522531730072 
+0.000005116007541059 
+0.000004797631110215 
+0.000004784509561686 
+0.000004473545605918 
+0.000004342577631107 
+0.000004064797343488 
+0.000004063644188412 
+0.000003865877590879 
+0.000003653037790875 
+0.000003637842419990 
+0.000003386516594547 
+0.000003130366457631 
+0.000002977246663017 
+0.000002882530710919 
+0.000002538497184049 
+0.000002505827486202 
+0.000002309697235112 
+0.000001808839531249 
+0.000001797106897059 
+0.000001565211931281 
+0.000001555312183134 
+0.000001408267510825 
+0.000001365907202482 
+0.000001302339916052 
+0.000001237594241464 
+0.000001108041144894 
+0.000001061571017183 
+0.000000937397714155 
+0.000000871167733055 
+0.000000834535321843 
+0.000000760280816693 
+0.000000676935925759 
+0.000000657762114094 
+0.000000612476643054 
+0.000000541625110851 
+0.000000514281053563 
+0.000000439069844454 
+0.000000370412162418 
+0.000000023499011157 
+0.000000018764254299 
+0.000000001444867446 
+0.000000001262488202 
+0.000000000836084418 
+0.000000000000000000 
+0.000000000000000000 
+0.000000000000000000 
+0.000000000000000000 
+0.000000000000000000 
+0.000000000000000000 
+0.000000000000000000 
+0.000000000000000000 
+0.000000000000000000 
+0.000000000000000000 
+0.000000000000000000 
+0.000000000000000000 
+0.000000000000000000 
+0.000000000000000000 
+0.000000000000000000 
+0.000000000000000000 
+0.000000000000000000 
+
+
+Total speed  was 0.005488,
+```
+
+## Armadillo
+```
+13:11:58 **** Incremental Build of configuration Debug for project TestSVD ****
+make all 
+Building file: ../src/TestSVD.cpp
+Invoking: Cross G++ Compiler
+g++ -O2 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/TestSVD.d" -MT"src/TestSVD.o" -o "src/TestSVD.o" "../src/TestSVD.cpp"
+Finished building: ../src/TestSVD.cpp
+ 
+Building target: TestSVD
+Invoking: Cross G++ Linker
+g++  -o "TestSVD"  ./src/TestSVD.o   -larmadillo
+Finished building target: TestSVD
+ 
+
+13:12:04 Build Finished. 0 errors, 0 warnings. (took 6s.452ms)
+
+------------------------------------------------------------------------------
+/*
+ * Simulation with Armadillo C++
+ */
+
+#include <iostream>
+#include <armadillo>
+#include <time.h>
+using namespace std;
+using namespace arma;
+
+int main() {
+
+	clock_t start, end;
+	float cpu_time_used;
+	start = clock();
+
+	/*
+	 * Declare vector and matrix
+	 */
+	mat u(1, 144);
+	mat y(1, 144);
+	mat toe(144, 144);
+	mat triup(144, 144);
+	mat inverse(144, 144);
+	mat g(1, 144); // markov parameters
+	vec g_v; // Impulse vector
+	mat H1(144, 144); // Hankel 1 of markov parameters
+	mat H1_half(72, 72);
+
+	/*
+	 * G(s) = 4/(2s^2 + s + 5) - Model
+	 */
+
+	double output[144] = { 0.00000, 0.49525, 1.43863, 2.13779, 2.30516, 2.05713,
+			1.69220, 1.45608, 1.42777, 1.54146, 1.67927, 1.75624, 1.75400,
+			1.70478, 1.65394, 1.62996, 1.63549, 1.65594, 1.67426, 1.68125,
+			1.67752, 1.66930, 1.66285, 1.66102, 1.66300, 1.66621, 1.66842,
+			1.66880, 1.66786, 1.66664, 1.66591, 1.66588, 1.66629, 1.66675,
+			1.66698, 1.66695, 1.66678, 1.66661, 1.66654, 1.66657, 1.66664,
+			1.66670, 1.66672, 1.66670, 1.66667, 1.66665, 1.66665, 1.66666,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66666, 1.66666,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667, 1.66667,
+			1.66667, 1.66667, 1.66667, 1.66667, 1.66667 };
+
+	double input[144] = { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+			5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+			5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+			5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+			5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+			5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+			5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5 };
+
+	// Insert
+	for (int i = 0; i < 144; i++) {
+		u(0, i) = input[i];
+		y(0, i) = output[i];
+	}
+
+	// Toeplitz
+	toe = toeplitz(u);
+
+	// Triangular upper
+	triup = trimatu(toe);
+
+	// inverse
+	inverse = inv(triup);
+
+	// impulse
+	g = y * inverse;
+
+	// Turn it to a vector
+	g_v = trans(g);
+
+	// Create a initial matrix
+	int length = g_v.n_rows;
+	for (int i = 0; i < length; i++) {
+		for (int j = 0; j < length; j++) {
+			if (j + i + 1 >= length) {
+				H1(i, j) = 0;
+			} else {
+				H1(i, j) = g_v(j + i + 1);
+			}
+		}
+	}
+
+	// cut
+	H1_half = H1(span(0, 71), span(0, 71));
+
+	mat U;
+	vec s;
+	mat V;
+
+	svd(U, s, V, H1_half);
+
+	s.print("s-matrix: "); // <--- Why does this U is not as same as the "u" from svd at the MATLAB code below?
+
+	end = clock();
+	cpu_time_used = ((float) (end - start)) / CLOCKS_PER_SEC;
+	printf("\nTotal speed  was %f,", cpu_time_used);
+
+	return 0;
+}
+-------------------------------------------------------------------------------------
+s-matrix: 
+   4.0768e-01
+   2.3812e-01
+   1.1845e-05
+   1.1666e-05
+   8.8834e-06
+   8.6317e-06
+   7.7350e-06
+   7.5115e-06
+   7.4884e-06
+   7.4074e-06
+   6.1215e-06
+   5.5225e-06
+   5.1160e-06
+   4.7976e-06
+   4.7845e-06
+   4.4735e-06
+   4.3426e-06
+   4.0648e-06
+   4.0636e-06
+   3.8659e-06
+   3.6530e-06
+   3.6378e-06
+   3.3865e-06
+   3.1304e-06
+   2.9772e-06
+   2.8825e-06
+   2.5385e-06
+   2.5058e-06
+   2.3097e-06
+   1.8088e-06
+   1.7971e-06
+   1.5652e-06
+   1.5553e-06
+   1.4083e-06
+   1.3659e-06
+   1.3023e-06
+   1.2376e-06
+   1.1080e-06
+   1.0616e-06
+   9.3740e-07
+   8.7117e-07
+   8.3454e-07
+   7.6028e-07
+   6.7694e-07
+   6.5776e-07
+   6.1248e-07
+   5.4163e-07
+   5.1428e-07
+   4.3907e-07
+   3.7041e-07
+   2.3499e-08
+   1.8764e-08
+   1.4449e-09
+   1.2625e-09
+   8.3608e-10
+   2.7890e-17
+   2.7890e-17
+   2.7890e-17
+   2.7890e-17
+   2.7890e-17
+   2.7890e-17
+   2.7890e-17
+   2.7890e-17
+   2.7890e-17
+   2.7890e-17
+   2.7890e-17
+   2.7890e-17
+   2.7890e-17
+   2.7890e-17
+   2.7890e-17
+   2.7890e-17
+   2.7890e-17
+
+Total speed  was 0.031486,
+```
+### Result
+EmbeddedLapack is about 6 times faster than Armadillo. 
+```
+>> 0.031486/0.005488
+ans =  5.7372
+```
 
 ## Read the .c files
 If you don't know how to use the function, you can read the .c file of that function that you want to use. It will always be a comment above the function name that describe what you should have as argument, what size and what data type and what it will return. Here is an example.
