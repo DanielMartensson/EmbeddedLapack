@@ -1022,7 +1022,7 @@ s-matrix:
 Total speed  was 0.031486,
 ```
 ### Result
-EmbeddedLapack is about 6 times faster than Armadillo. 
+EmbeddedLapack is about 6 times faster than Armadillo in this case.
 ```
 >> 0.031486/0.005488
 ans =  5.7372
