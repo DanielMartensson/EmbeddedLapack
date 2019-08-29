@@ -6,8 +6,14 @@
  */
 #include <stdio.h>
 #include "Blas/f2c.h"
+#include "Blas/blasFunctions.h"
 #include <time.h>
+
 int main(){
+	/*
+	 * Notice that BLAS uses transpose matrices as default.  
+	 */
+	
 	// Transpose matrix A'
 	real A[4*3]={-0.0941,  0.5298, 0.1350,
 		      0.4098, -0.1581, -0.2768,
@@ -30,7 +36,7 @@ int main(){
 	clock_t start, end;
 	float cpu_time_used;
 	start = clock();
-	sgemv_(&trans, &m, &n,   &alpha, A, &m, x, &incx, &beta, b, &incy); // b = alpha*A*x + beta*b
+	sgemv_(&trans, &m, &n,   &alpha, A, &m, x, &incx, &beta, b, &incy); // b' = alpha*A'*x' + beta*b'
 	end = clock();
 	cpu_time_used = ((float) (end - start)) / CLOCKS_PER_SEC;
 	printf("\nTotal speed  was %f,", cpu_time_used);
