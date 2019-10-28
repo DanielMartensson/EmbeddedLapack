@@ -13,7 +13,7 @@
 #include "../../Lapack/Include/f2c.h"
 
 
-/* Subroutine */ int dgemm_(char *transa, char *transb, integer *m, integer *
+/* Subroutine */ int dgemm__(char *transa, char *transb, integer *m, integer *
 	n, integer *k, doublereal *alpha, doublereal *a, integer *lda, 
 	doublereal *b, integer *ldb, doublereal *beta, doublereal *c__, 
 	integer *ldc)

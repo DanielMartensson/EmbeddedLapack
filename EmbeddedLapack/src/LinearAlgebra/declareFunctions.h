@@ -8,11 +8,17 @@
 #ifndef LINEARALGEBRA_DECLAREFUNCTIONS_H_
 #define LINEARALGEBRA_DECLAREFUNCTIONS_H_
 
-//
+#define TRUE 1
+#define FALSE 0
+
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <math.h>
+
+
+// This is for qpOASES - If you want red output results or not
+#define SHOW_QP_OUTPUT FALSE
 
 
 /*
@@ -21,6 +27,7 @@
 #include "../../src/Lapack/Include/f2c.h"
 // #include "../../src/Lapack/Include/blaswrap.h" // No need in this project! :)
 #include "../../src/Lapack/Include/clapack.h"
+#include "../../src/qpOASES/Header/qpOASES_e.h"
 
 
 
@@ -71,5 +78,6 @@ void eig(double* A, double* Ereal, double* Eimag, double* Vreal_left, double* Vi
 void mpower(double* A, int row, int n);
 void insert(double* A, double* B, int row_a, int column_a, int column_b, int startRow_b, int startColumn_b);
 void move(double* A, int row, int column, int down, int right);
+void quadprog(double* H, double* g, double* A, double* ulb_vec, double* uub_vec,  double* ylb_vec, double* yub_vec, int* nWSR, double* u, int columnH, int rowA);
 
 #endif /* LINEARALGEBRA_DECLAREFUNCTIONS_H_ */

@@ -8,6 +8,10 @@
 extern "C" {	
 #endif		
 
+/*
+ * HERE I HAVE PLACED DOUBLE _ after function names that are in conflict with qpOASES
+ */
+
 /* Subroutine */ int caxpy_(integer *n, complex *ca, complex *cx, integer *
 	incx, complex *cy, integer *incy);
 
@@ -143,7 +147,7 @@ doublereal ddot_(integer *n, doublereal *dx, integer *incx, doublereal *dy,
 	doublereal *x, integer *incx, doublereal *beta, doublereal *y, 
 	integer *incy);
 
-/* Subroutine */ int dgemm_(char *transa, char *transb, integer *m, integer *
+/* Subroutine */ int dgemm__(char *transa, char *transb, integer *m, integer *
 	n, integer *k, doublereal *alpha, doublereal *a, integer *lda, 
 	doublereal *b, integer *ldb, doublereal *beta, doublereal *c__, 
 	integer *ldc);
@@ -202,10 +206,10 @@ doublereal dsdot_(integer *n, real *sx, integer *incx, real *sy, integer *
 	doublereal *a, integer *lda, doublereal *x, integer *incx, doublereal 
 	*beta, doublereal *y, integer *incy);
 
-/* Subroutine */ int dsyr_(char *uplo, integer *n, doublereal *alpha, 
+/* Subroutine */ int dsyr__(char *uplo, integer *n, doublereal *alpha,
 	doublereal *x, integer *incx, doublereal *a, integer *lda);
 
-/* Subroutine */ int dsyr2_(char *uplo, integer *n, doublereal *alpha, 
+/* Subroutine */ int dsyr2__(char *uplo, integer *n, doublereal *alpha,
 	doublereal *x, integer *incx, doublereal *y, integer *incy, 
 	doublereal *a, integer *lda);
 
@@ -280,7 +284,7 @@ doublereal sdsdot_(integer *n, real *sb, real *sx, integer *incx, real *sy,
 	integer *ku, real *alpha, real *a, integer *lda, real *x, integer *
 	incx, real *beta, real *y, integer *incy);
 
-/* Subroutine */ int sgemm_(char *transa, char *transb, integer *m, integer *
+/* Subroutine */ int sgemm__(char *transa, char *transb, integer *m, integer *
 	n, integer *k, real *alpha, real *a, integer *lda, real *b, integer *
 	ldb, real *beta, real *c__, integer *ldc);
 
@@ -330,10 +334,10 @@ doublereal snrm2_(integer *n, real *x, integer *incx);
 	integer *lda, real *x, integer *incx, real *beta, real *y, integer *
 	incy);
 
-/* Subroutine */ int ssyr_(char *uplo, integer *n, real *alpha, real *x, 
+/* Subroutine */ int ssyr__(char *uplo, integer *n, real *alpha, real *x,
 	integer *incx, real *a, integer *lda);
 
-/* Subroutine */ int ssyr2_(char *uplo, integer *n, real *alpha, real *x, 
+/* Subroutine */ int ssyr2__(char *uplo, integer *n, real *alpha, real *x,
 	integer *incx, real *y, integer *incy, real *a, integer *lda);
 
 /* Subroutine */ int ssyr2k_(char *uplo, char *trans, integer *n, integer *k, 
@@ -3331,7 +3335,7 @@ doublereal dlapy3_(doublereal *x, doublereal *y, doublereal *z__);
 /* Subroutine */ int dpotf2_(char *uplo, integer *n, doublereal *a, integer *
 	lda, integer *info);
 
-/* Subroutine */ int dpotrf_(char *uplo, integer *n, doublereal *a, integer *
+/* Subroutine */ int dpotrf__(char *uplo, integer *n, doublereal *a, integer *
 	lda, integer *info);
 
 /* Subroutine */ int dpotri_(char *uplo, integer *n, doublereal *a, integer *
@@ -5023,7 +5027,7 @@ doublereal slapy3_(real *x, real *y, real *z__);
 /* Subroutine */ int spotf2_(char *uplo, integer *n, real *a, integer *lda, 
 	integer *info);
 
-/* Subroutine */ int spotrf_(char *uplo, integer *n, real *a, integer *lda, 
+/* Subroutine */ int spotrf__(char *uplo, integer *n, real *a, integer *lda,
 	integer *info);
 
 /* Subroutine */ int spotri_(char *uplo, integer *n, real *a, integer *lda, 

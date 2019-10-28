@@ -34,6 +34,7 @@ C_SRCS += \
 ../src/LinearAlgebra/power.c \
 ../src/LinearAlgebra/print.c \
 ../src/LinearAlgebra/qr.c \
+../src/LinearAlgebra/quadprog.c \
 ../src/LinearAlgebra/rank.c \
 ../src/LinearAlgebra/repmat.c \
 ../src/LinearAlgebra/scale.c \
@@ -80,6 +81,7 @@ OBJS += \
 ./src/LinearAlgebra/power.o \
 ./src/LinearAlgebra/print.o \
 ./src/LinearAlgebra/qr.o \
+./src/LinearAlgebra/quadprog.o \
 ./src/LinearAlgebra/rank.o \
 ./src/LinearAlgebra/repmat.o \
 ./src/LinearAlgebra/scale.o \
@@ -126,6 +128,7 @@ C_DEPS += \
 ./src/LinearAlgebra/power.d \
 ./src/LinearAlgebra/print.d \
 ./src/LinearAlgebra/qr.d \
+./src/LinearAlgebra/quadprog.d \
 ./src/LinearAlgebra/rank.d \
 ./src/LinearAlgebra/repmat.d \
 ./src/LinearAlgebra/scale.d \
@@ -145,8 +148,8 @@ C_DEPS += \
 # Each subdirectory must supply rules for building sources it contributes
 src/LinearAlgebra/%.o: ../src/LinearAlgebra/%.c
 	@echo 'Building file: $<'
-	@echo 'Invoking: Cross GCC Compiler'
-	gcc -std=c11 -O2 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	@echo 'Invoking: GCC C Compiler'
+	gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

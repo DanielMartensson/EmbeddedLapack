@@ -96,6 +96,7 @@ void eig(double* A, double* Ereal, double* Eimag, double* Vreal_left, double* Vi
 void mpower(double* A, int row, int n);
 void insert(double* A, double* B, int row_a, int column_a, int column_b, int startRow_b, int startColumn_b);
 void move(double* A, int row, int column, int down, int right);
+void quadprog(double* H, double* g, double* A, double* ulb_vec, double* uub_vec,  double* ylb_vec, double* yub_vec, int* nWSR, double* u, int columnH, int rowA);
 ```
 ## Compiler and microprocessor
 When you compile this, you need to take respect on this.
@@ -626,7 +627,7 @@ int main() {
 ## Simulation between EmbeddedLapack (C), Armadillo (C++) and GNU Octave
 Here is a simulation of a step response that turning into an impulse response. Then we take the SVD of that impulse response.
 
-### EmbeddedAlgebra
+### EmbeddedLapack
 ```
 13:15:53 **** Incremental Build of configuration Debug for project EmbeddedLapack ****
 make all 

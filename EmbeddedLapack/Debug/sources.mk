@@ -19,4 +19,5 @@ src/Lapack/Install \
 src/Lapack/Scr \
 src/LinearAlgebra \
 src \
+src/qpOASES/Source \
 

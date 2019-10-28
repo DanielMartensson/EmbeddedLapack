@@ -8,6 +8,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include src/qpOASES/Source/subdir.mk
 -include src/LinearAlgebra/subdir.mk
 -include src/Lapack/Scr/subdir.mk
 -include src/Lapack/Install/subdir.mk
@@ -33,7 +34,7 @@ all: EmbeddedLapack
 # Tool invocations
 EmbeddedLapack: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
-	@echo 'Invoking: Cross GCC Linker'
+	@echo 'Invoking: GCC C Linker'
 	gcc  -o "EmbeddedLapack" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
