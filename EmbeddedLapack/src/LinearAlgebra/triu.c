@@ -2,7 +2,7 @@
  * triu.c
  *
  *  Created on: 10 feb. 2019
- *      Author: dell
+ *      Author: Daniel Mårtensson
  */
 
 

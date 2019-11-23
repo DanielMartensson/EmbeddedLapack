@@ -7,8 +7,8 @@ int main() {
 	float cpu_time_used;
 	start = clock();
 
-	/*
-	 * Your linear algebra C-code here
+	/**
+	 * Your code here
 	 */
 
 	end = clock();

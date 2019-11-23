@@ -2,7 +2,7 @@
  * diagm.c
  *
  *  Created on: 15 feb. 2019
- *      Author: dell
+ *      Author: Daniel Mårtensson
  */
 
 #include "declareFunctions.h"

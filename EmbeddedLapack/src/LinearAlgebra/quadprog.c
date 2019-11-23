@@ -17,6 +17,10 @@
  *
  *  H is a hessian(symmetric) positive positive semidefinite matrix
  *
+ *  Notice that if you want to solve Ax = b with constraints, just set
+ *  H = A^T*A
+ *  g = A^T*b
+ *
  *  Set nWSR to a number > 0 so QP can do its sets
  *  Set SHOW_QP_OUTPUT to TRUE to begin with in declareFunctions.h
  *  I recommend to read the qpOASES_e manual

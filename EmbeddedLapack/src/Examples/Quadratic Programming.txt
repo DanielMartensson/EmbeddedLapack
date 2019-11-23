@@ -9,6 +9,8 @@ int main() {
 	
 	/*
 	 * Assume that you want to solve the linear equation Ax = b, with constraints/limits on x and A*x
+	 * Let: H = A'*A
+	 *      g = A'*b;
 	 */
 
 	// Hessian matrix

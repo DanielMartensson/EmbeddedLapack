@@ -20,6 +20,7 @@ C_SRCS += \
 ../src/LinearAlgebra/horzcat.c \
 ../src/LinearAlgebra/insert.c \
 ../src/LinearAlgebra/inv.c \
+../src/LinearAlgebra/linprog.c \
 ../src/LinearAlgebra/linsolve.c \
 ../src/LinearAlgebra/lu.c \
 ../src/LinearAlgebra/maxvector.c \
@@ -67,6 +68,7 @@ OBJS += \
 ./src/LinearAlgebra/horzcat.o \
 ./src/LinearAlgebra/insert.o \
 ./src/LinearAlgebra/inv.o \
+./src/LinearAlgebra/linprog.o \
 ./src/LinearAlgebra/linsolve.o \
 ./src/LinearAlgebra/lu.o \
 ./src/LinearAlgebra/maxvector.o \
@@ -114,6 +116,7 @@ C_DEPS += \
 ./src/LinearAlgebra/horzcat.d \
 ./src/LinearAlgebra/insert.d \
 ./src/LinearAlgebra/inv.d \
+./src/LinearAlgebra/linprog.d \
 ./src/LinearAlgebra/linsolve.d \
 ./src/LinearAlgebra/lu.d \
 ./src/LinearAlgebra/maxvector.d \

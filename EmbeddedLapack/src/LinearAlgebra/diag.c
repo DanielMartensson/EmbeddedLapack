@@ -2,7 +2,7 @@
  * diag.c
  *
  *  Created on: 9 feb. 2019
- *      Author: dell
+ *      Author: Daniel Mårtensson
  */
 #include "declareFunctions.h"
 

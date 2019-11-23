@@ -2,7 +2,7 @@
  * chol.c
  *
  *  Created on: 12 feb. 2019
- *      Author: dell
+ *      Author: Daniel Mårtensson
  */
 
 #include "declareFunctions.h"

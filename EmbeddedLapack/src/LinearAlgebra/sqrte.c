@@ -2,7 +2,7 @@
  * sqrte.c
  *
  *  Created on: 16 feb. 2019
- *      Author: dell
+ *      Author: Daniel Mårtensson
  */
 
 
@@ -14,7 +14,7 @@
 void sqrte(double* A, int row, int column){
 	for(int i = 0; i < row; i++)
 		for(int j = 0; j < column; j++){
-			*A = sqrtf(*(A));
+			*A = sqrt(*(A));
 			A++;
 		}
 }
