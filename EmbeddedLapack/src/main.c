@@ -7,21 +7,9 @@ int main() {
 	float cpu_time_used;
 	start = clock();
 
-	double A[2*3] ={2, 3, 2,
-		            1, 1, 2};
-
-	double b[2] = {1000,
-				   800};
-
-	double c[3] = {7,
-		           8,
-	              10};
-	double x[3];
-	int iteration_limit = 100;
-	linprog(c, A, b, x, 2, 3, iteration_limit);
-
-	// Solution
-	print(x, 3, 1);
+	/**
+	 * Your code here
+	 */
 
 	end = clock();
 	cpu_time_used = ((float) (end - start)) / CLOCKS_PER_SEC;
