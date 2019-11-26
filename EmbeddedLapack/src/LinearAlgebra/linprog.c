@@ -1,7 +1,7 @@
 /*
  * linprog.c
  *
- *  Created on: 23 nov. 2019
+ *  Created on: 26 nov. 2019
  *      Author: Daniel Mårtensson
  */
 
@@ -16,12 +16,10 @@
  * Call this function with the sizes
  * A [m*n] // Matrix
  * b [m] // Constraints
- * c [m] // Objective function
- * x [m] // Solution
+ * c [n] // Objective function
+ * x [n] // Solution
  * row_a = m
  * column_a = n
- *
- * Notice that you can solve Ax = b with constraints just to set c = A^T*b
  */
 void linprog(double* c, double* A, double* b, double* x, int row_a, int column_a){
 
@@ -29,7 +27,7 @@ void linprog(double* c, double* A, double* b, double* x, int row_a, int column_a
 	memset(x, 0, column_a*sizeof(double));
 
 	// Create the tableau with space for the slack variables s and p as well
-	double tableau[(row_a+1)*(column_a+row_a+2)];
+	double tableau[(row_a+1)*(column_a+row_a+2)]; // +1 because the extra row for objective function and +2 for the b vector and slackvariable for objective function
 	memset(tableau, 0, (row_a+1)*(column_a+row_a+2)*sizeof(double));
 
 	// Load the constraints
@@ -47,69 +45,100 @@ void linprog(double* c, double* A, double* b, double* x, int row_a, int column_a
 
 	}
 	// Negative objective function
-	for(int i = 0; i < row_a; i++){
+	for(int i = 0; i < column_a; i++){
 		tableau[(row_a+1-1)*(column_a+row_a+2) + i] = -*(c +i);
 	}
 	// Slack variable for the objective function
 	tableau[(row_a+1-1)*(column_a+row_a+2) + (column_a+row_a+2-2)] = 1;
 	// Done!
 
-	// Check the smallest negative value of objective function - Need to be < 0
-	double value = 0.0;
-	int indexColumn = 0;
-	double div = 0.0;
-	int indexRow = 0;
+	// Print tableau
+	//print(tableau,(row_a+1),(column_a+row_a+2));
+
+	// Do row operations
+	double entry = 0.0;
+	int pivotColumIndex = 0;
+	int pivotRowIndex = 0;
+	double pivot = 0.0;
+	double value1 = 0.0;
+	double value2 = 0.0;
+	double value3 = 0.0;
+	double smallest = 0.0;
 	do{
-		// Search in the negative objective function
-		value = 0;
-		indexColumn = 0;
-		for(int i = 0; i < (column_a+row_a+2) - 1; i++){
-			if(tableau[(row_a+1-1)*(column_a+row_a+2) + i] < value){
-				value = tableau[(row_a+1-1)*(column_a+row_a+2) + i]; // Save
-				indexColumn = i; // Remember index
+		// Find our pivot column
+		pivotColumIndex = 0;
+		entry = 0.0;
+		for(int i = 0; i < (column_a+row_a+2) -1; i++){ // -1 because we don't want to count with the last column
+			value1 = *(tableau + (row_a+1-1)*(column_a+row_a+2) + i); // Bottom row
+			if(value1 < entry){
+				entry = value1;
+				pivotColumIndex = i;
 			}
 		}
-		// Check that index and divide the columns with the right columns
-		div = tableau[(column_a+row_a+2-1)]/tableau[indexColumn]; // Use the upper row as first value
-		for(int i = 0; i < row_a; i++){
-			if(tableau[i*(column_a+row_a+2) + (column_a+row_a+2-1)]/tableau[i*(column_a+row_a+2) + indexColumn] < div){
-				div = tableau[i*(column_a+row_a+2) + (column_a+row_a+2-1)]/tableau[i*(column_a+row_a+2) + indexColumn];
-				indexRow = i; // save
+
+		// If the smallest entry is equal to 0 or larger than 0, break
+		if(entry >= 0)
+			break;
+
+		// Find our pivot row
+		pivotRowIndex = 0;
+		value1 = *(tableau + 0*(column_a+row_a+2) + pivotColumIndex); // Value in pivot column
+		value2 = *(tableau + 0*(column_a+row_a+2) + (column_a+row_a+2-1)); // Value in the b vector
+		smallest = value2/value1; // Initial smallest value
+		for(int i = 1; i < row_a; i++){
+			value1 = *(tableau + i*(column_a+row_a+2) + pivotColumIndex); // Value in pivot column
+			value2 = *(tableau + i*(column_a+row_a+2) + (column_a+row_a+2-1)); // Value in the b vector
+			value3 = value2/value1;
+			if(value3 < smallest){
+				smallest = value3;
+				pivotRowIndex = i;
 			}
 		}
-		// Time to do row operations on the tableau.
-		// First change the value at indexRow and indexColumn to 1
-		div = tableau[indexRow*(column_a+row_a+2) + indexColumn];
+
+		// We know where our pivot is. Turn the pivot into 1
+		// 1/pivot * PIVOT_ROW -> PIVOT_ROW
+		pivot = *(tableau + pivotRowIndex*(column_a+row_a+2) + pivotColumIndex); // Our pivot value
+		//printf("pivotRowIndex = %i, pivotColumIndex = %i, pivot = %f\n", pivotRowIndex, pivotColumIndex, pivot);
 		for(int i = 0; i < (column_a+row_a+2); i++){
-			tableau[indexRow*(column_a+row_a+2) + i] = tableau[indexRow*(column_a+row_a+2) + i] * 1/div;
+			value1 = *(tableau + pivotRowIndex*(column_a+row_a+2) + i); // Our row value at pivot row
+			*(tableau + pivotRowIndex*(column_a+row_a+2) + i) = value1 * 1/pivot; // When value1 = pivot, then pivot will be 1
 		}
-		// Then set the rest of the columns to 0
+		//printf("Set to 1\n");
+		//print(tableau,(row_a+1),(column_a+row_a+2));
+
+		// Turn all other values in pivot column into 0. Jump over pivot row
+		// -value1* PIVOT_ROW + ROW -> ROW
 		for(int i = 0; i < row_a + 1; i++){
-			// We only do row operations on rest of the rows
-			if(i != indexRow){
-				div = tableau[i*(column_a+row_a+2) + indexColumn];
+			if(i != pivotRowIndex){
+				value1 = *(tableau + i*(column_a+row_a+2) + pivotColumIndex); // This is at pivot column
 				for(int j = 0; j < (column_a+row_a+2); j++){
-					tableau[i*(column_a+row_a+2) + j] = -div * tableau[indexRow*(column_a+row_a+2) + j] + tableau[i*(column_a+row_a+2) + j];
+					value2 = *(tableau + pivotRowIndex*(column_a+row_a+2) + j); // This is at pivot row
+					value3 = *(tableau + i*(column_a+row_a+2) + j); // This is at the row we want to be 0 at pivot column
+					*(tableau + i*(column_a+row_a+2) + j) = -value1*value2 + value3;
 				}
 			}
 		}
-	}while(value < 0);
+		//printf("Set to 0\n");
+		//print(tableau,(row_a+1),(column_a+row_a+2));
 
-	// Now when we have shaped our tableau. Let's find the optimal solution
-	// Sum the columns
-	for(int i = 0; i < column_a-1; i++){
-		value = 0; // Reset
+		//print(tableau,(row_a+1),(column_a+row_a+2));
+
+	}while(entry < 0); // Continue if we have still negative entries
+
+	// Now when we have shaped our tableau. Let's find the optimal solution. Sum the columns
+	for(int i = 0; i < column_a; i++){
+		value1 = 0; // Reset
 		for(int j = 0; j < row_a + 1; j++){
-			value += tableau[j*(column_a+row_a+2) + i]; // Summary
-			div = tableau[j*(column_a+row_a+2) + i]; // If this is 1 then we are on the selected
+			value1 += *(tableau + j*(column_a+row_a+2) + i); // Summary
+			value2 = *(tableau + j*(column_a+row_a+2) + i); // If this is 1 then we are on the selected
 
 			// Check if we have a value that are very close to 1
-			if(value < 1.00001 && value > 0.99999 && div > 0.99999){
-				*(x + i) = tableau[j*(column_a+row_a+2) + (column_a+row_a+2-1)];
+			if(value1 < 1.00001 && value1 > 0.99999 && value2 > 0.99999){
+				*(x + i) = *(tableau + j*(column_a+row_a+2) + (column_a+row_a+2-1));
 			}
 		}
 	}
 
-	//print(tableau, row_a+1, column_a+row_a+2);
+	//print(tableau,(row_a+1),(column_a+row_a+2));
 
 }
