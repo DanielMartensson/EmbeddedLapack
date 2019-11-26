@@ -79,6 +79,6 @@ void mpower(double* A, int row, int n);
 void insert(double* A, double* B, int row_a, int column_a, int column_b, int startRow_b, int startColumn_b);
 void move(double* A, int row, int column, int down, int right);
 void quadprog(double* H, double* g, double* A, double* ulb_vec, double* uub_vec,  double* ylb_vec, double* yub_vec, int* nWSR, double* u, int columnH, int rowA);
-void linprog(double* c, double* A, double* b, double* x, int row_a, int column_a);
+void linprog(double* c, double* A, double* b, double* x, int row_a, int column_a, int iteration_limit);
 
 #endif /* LINEARALGEBRA_DECLAREFUNCTIONS_H_ */

@@ -21,7 +21,7 @@
  * row_a = m
  * column_a = n
  */
-void linprog(double* c, double* A, double* b, double* x, int row_a, int column_a){
+void linprog(double* c, double* A, double* b, double* x, int row_a, int column_a, int iteration_limit){
 
 	// Clear the solution
 	memset(x, 0, column_a*sizeof(double));
@@ -42,8 +42,8 @@ void linprog(double* c, double* A, double* b, double* x, int row_a, int column_a
 
 		// Add b vector
 		tableau[i*(column_a+row_a+2) + (column_a+row_a+2-1)] = *(b+i);
-
 	}
+
 	// Negative objective function
 	for(int i = 0; i < column_a; i++){
 		tableau[(row_a+1-1)*(column_a+row_a+2) + i] = -*(c +i);
@@ -64,6 +64,7 @@ void linprog(double* c, double* A, double* b, double* x, int row_a, int column_a
 	double value2 = 0.0;
 	double value3 = 0.0;
 	double smallest = 0.0;
+	int count = 0;
 	do{
 		// Find our pivot column
 		pivotColumIndex = 0;
@@ -75,9 +76,9 @@ void linprog(double* c, double* A, double* b, double* x, int row_a, int column_a
 				pivotColumIndex = i;
 			}
 		}
-
+		//printf("Entry = %f\n", entry);
 		// If the smallest entry is equal to 0 or larger than 0, break
-		if(entry >= 0)
+		if(entry >= 0.0 || count >= iteration_limit)
 			break;
 
 		// Find our pivot row
@@ -89,7 +90,7 @@ void linprog(double* c, double* A, double* b, double* x, int row_a, int column_a
 			value1 = *(tableau + i*(column_a+row_a+2) + pivotColumIndex); // Value in pivot column
 			value2 = *(tableau + i*(column_a+row_a+2) + (column_a+row_a+2-1)); // Value in the b vector
 			value3 = value2/value1;
-			if(value3 < smallest){
+			if( (value3 > 0  && value3 < smallest ) || smallest < 0 ){
 				smallest = value3;
 				pivotRowIndex = i;
 			}
@@ -121,7 +122,8 @@ void linprog(double* c, double* A, double* b, double* x, int row_a, int column_a
 		//printf("Set to 0\n");
 		//print(tableau,(row_a+1),(column_a+row_a+2));
 
-		//print(tableau,(row_a+1),(column_a+row_a+2));
+		// Count for the iteration
+		count++;
 
 	}while(entry < 0); // Continue if we have still negative entries
 
