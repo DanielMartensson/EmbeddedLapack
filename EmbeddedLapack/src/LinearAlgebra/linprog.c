@@ -8,7 +8,7 @@
 
 #include "declareFunctions.h"
 
-static void opti(float* c, float* A, float* b, float* x, int row_a, int column_a, uint8_t max_or_min, int iteration_limit);
+static void opti(double* c, double* A, double* b, double* x, int row_a, int column_a, uint8_t max_or_min, int iteration_limit);
 
 
 /**
@@ -39,7 +39,7 @@ static void opti(float* c, float* A, float* b, float* x, int row_a, int column_a
  * max_or_min == 0 -> Maximization
  * max_or_min == 1 -> Minimization
  */
-void linprog(float* c, float* A, float* b, float* x, int row_a, int column_a, uint8_t max_or_min, int iteration_limit){
+void linprog(double* c, double* A, double* b, double* x, int row_a, int column_a, uint8_t max_or_min, int iteration_limit){
 
 	if(max_or_min == 0){
 		// Maximization
@@ -53,23 +53,23 @@ void linprog(float* c, float* A, float* b, float* x, int row_a, int column_a, ui
 
 }
 // This is Simplex method with the Dual included
-static void opti(float* c, float* A, float* b, float* x, int row_a, int column_a, uint8_t max_or_min, int iteration_limit){
+static void opti(double* c, double* A, double* b, double* x, int row_a, int column_a, uint8_t max_or_min, int iteration_limit){
 
 	// Clear the solution
 	if(max_or_min == 0)
-		memset(x, 0, column_a*sizeof(float));
+		memset(x, 0, column_a*sizeof(double));
 	else
-		memset(x, 0, row_a*sizeof(float)); //
+		memset(x, 0, row_a*sizeof(double)); //
 
 	// Create the tableau with space for the slack variables s and p as well
 	float tableau[(row_a+1)*(column_a+row_a+2)]; // +1 because the extra row for objective function and +2 for the b vector and slackvariable for objective function
-	memset(tableau, 0, (row_a+1)*(column_a+row_a+2)*sizeof(float));
+	memset(tableau, 0, (row_a+1)*(column_a+row_a+2)*sizeof(double));
 
 	// Load the constraints
 	int j = 0;
 	for(int i = 0; i < row_a; i++){
 		// First row
-		memcpy(tableau + i*(column_a+row_a+2), A + i*column_a, column_a*sizeof(float));
+		memcpy(tableau + i*(column_a+row_a+2), A + i*column_a, column_a*sizeof(double));
 
 		// Slack variable s
 		j = column_a + i;
@@ -93,14 +93,14 @@ static void opti(float* c, float* A, float* b, float* x, int row_a, int column_a
 	//print(tableau,(row_a+1),(column_a+row_a+2));
 
 	// Do row operations
-	float entry = 0.0;
+	double entry = 0.0;
 	int pivotColumIndex = 0;
 	int pivotRowIndex = 0;
-	float pivot = 0.0;
-	float value1 = 0.0;
-	float value2 = 0.0;
-	float value3 = 0.0;
-	float smallest = 0.0;
+	double pivot = 0.0;
+	double value1 = 0.0;
+	double value2 = 0.0;
+	double value3 = 0.0;
+	double smallest = 0.0;
 	int count = 0;
 	do{
 		// Find our pivot column
@@ -192,30 +192,53 @@ static void opti(float* c, float* A, float* b, float* x, int row_a, int column_a
 
 /*
  * GNU Octave code:
- *  >> A = [1 2; 1 -4]
-	A =
+ *
+ * // Do maximization
+   bounds_A = [0.7179787,   0.7985186,   0.1000046,   0.2203064,
+			   0.9044292,   0.5074379,   0.3539301,   0.9475452,
+			   0.0029252,   0.4930148,   0.3209303,   0.5289174,
+			   0.6546133,   0.7354447,   0.9989453,   0.0310190,
+			   0.7434944,   0.0874402,   0.3388867,   0.8256180,
+			   0.7483093,   0.3624991,   0.2039784,   0.5528368,
+			  -0.7179787,  -0.7985186,  -0.1000046,  -0.2203064,
+			  -0.9044292,  -0.5074379,  -0.3539301,  -0.9475452,
+			  -0.0029252,  -0.4930148,  -0.3209303,  -0.5289174,
+			  -0.6546133,  -0.7354447,  -0.9989453,  -0.0310190,
+			  -0.7434944,  -0.0874402,  -0.3388867,  -0.8256180,
+			  -0.7483093,  -0.3624991,  -0.2039784,  -0.5528368];
 
-	   1   2
-	   1  -4
+	bounds_b = [0.90000,
+				0.60000,
+				0.60000,
+				0.90000,
+				0.90000,
+				0.90000,
+				0.40000,
+				0.10000,
+				0.50000,
+				1.00000,
+				0.40000,
+				0.20000];
 
-	>> b =  [2; 5]
-	b =
+	c = [1.64160,
+		 0.92620,
+		 0.47139,
+		 1.43351];
 
-	   2
-	   5
+	x = glpk(c', bounds_A, bounds_b, [0;0;0;0], [], "UUUUUUUUUUUU", "CCCC", -1)
 
-	>> c = A'*b
-	c =
+  	// Do minimization
+	 A2 = [22  13;
+        	1   5;
+        	1 20];
 
-		7
-	  -16
+  	  C2 = [9;
+        	4];
 
-	>> x = glpk(c, A, b, [0;0], [], "UU", "CC", -1) % -1 is for maximize
-	x =
+  	  B2 = [25;
+        	 7;
+         	 7];
 
-	   2
-	   0
-
-	>>
-
+  	  y = glpk(C2', A2, B2, [0;0], [], "LLL", "CC", 1)
+ *
  */
