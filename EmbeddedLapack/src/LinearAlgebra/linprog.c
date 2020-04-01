@@ -62,7 +62,7 @@ static void opti(double* c, double* A, double* b, double* x, int row_a, int colu
 		memset(x, 0, row_a*sizeof(double)); //
 
 	// Create the tableau with space for the slack variables s and p as well
-	float tableau[(row_a+1)*(column_a+row_a+2)]; // +1 because the extra row for objective function and +2 for the b vector and slackvariable for objective function
+	double tableau[(row_a+1)*(column_a+row_a+2)]; // +1 because the extra row for objective function and +2 for the b vector and slackvariable for objective function
 	memset(tableau, 0, (row_a+1)*(column_a+row_a+2)*sizeof(double));
 
 	// Load the constraints
