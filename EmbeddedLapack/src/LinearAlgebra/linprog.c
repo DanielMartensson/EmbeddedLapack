@@ -3,38 +3,73 @@
  *
  *  Created on: 26 nov. 2019
  *      Author: Daniel Mårtensson
+ *  Update 31 Mars 2020
  */
 
 #include "declareFunctions.h"
 
+static void opti(float* c, float* A, float* b, float* x, int row_a, int column_a, uint8_t max_or_min, int iteration_limit);
+
+
 /**
- * This is linear programming with simplex method:
+ * This is linear programming with simplex method.
+ * You can do a minimization problem as well with simplex.
  * Max c^Tx
  * S.t Ax <= b
  *      x >= 0
+ *
+ * If you got this problem:
+ * Min c^Tx
+ * S.t Ax >= b
+ * 		x >= 0
+ *
+ * Then turn this into this problem:
+ * Max b^Tx
+ * S.t A'x <= c
+ * 		x >= 0
+ *
+ * In other words. Swap b and c and take transponse of A
  *
  * Call this function with the sizes
  * A [m*n] // Matrix
  * b [m] // Constraints
  * c [n] // Objective function
  * x [n] // Solution
- * row_a = m
- * column_a = n
+ * m >= n // Rows need to be greater or equal as columns
+ * max_or_min == 0 -> Maximization
+ * max_or_min == 1 -> Minimization
  */
-void linprog(double* c, double* A, double* b, double* x, int row_a, int column_a, int iteration_limit){
+void linprog(float* c, float* A, float* b, float* x, int row_a, int column_a, uint8_t max_or_min, int iteration_limit){
+
+	if(max_or_min == 0){
+		// Maximization
+		opti(c, A, b, x, row_a, column_a, max_or_min, iteration_limit);
+	}else{
+		// Minimization
+		tran(A, row_a, column_a);
+
+		opti(b, A, c, x, column_a, row_a, max_or_min, iteration_limit);
+	}
+
+}
+// This is Simplex method with the Dual included
+static void opti(float* c, float* A, float* b, float* x, int row_a, int column_a, uint8_t max_or_min, int iteration_limit){
 
 	// Clear the solution
-	memset(x, 0, column_a*sizeof(double));
+	if(max_or_min == 0)
+		memset(x, 0, column_a*sizeof(float));
+	else
+		memset(x, 0, row_a*sizeof(float)); //
 
 	// Create the tableau with space for the slack variables s and p as well
-	double tableau[(row_a+1)*(column_a+row_a+2)]; // +1 because the extra row for objective function and +2 for the b vector and slackvariable for objective function
-	memset(tableau, 0, (row_a+1)*(column_a+row_a+2)*sizeof(double));
+	float tableau[(row_a+1)*(column_a+row_a+2)]; // +1 because the extra row for objective function and +2 for the b vector and slackvariable for objective function
+	memset(tableau, 0, (row_a+1)*(column_a+row_a+2)*sizeof(float));
 
 	// Load the constraints
 	int j = 0;
 	for(int i = 0; i < row_a; i++){
 		// First row
-		memcpy(tableau + i*(column_a+row_a+2), A + i*column_a, column_a*sizeof(double));
+		memcpy(tableau + i*(column_a+row_a+2), A + i*column_a, column_a*sizeof(float));
 
 		// Slack variable s
 		j = column_a + i;
@@ -52,18 +87,20 @@ void linprog(double* c, double* A, double* b, double* x, int row_a, int column_a
 	tableau[(row_a+1-1)*(column_a+row_a+2) + (column_a+row_a+2-2)] = 1;
 	// Done!
 
+	//print(tableau,  row_a+1, column_a+row_a+2);
+
 	// Print tableau
 	//print(tableau,(row_a+1),(column_a+row_a+2));
 
 	// Do row operations
-	double entry = 0.0;
+	float entry = 0.0;
 	int pivotColumIndex = 0;
 	int pivotRowIndex = 0;
-	double pivot = 0.0;
-	double value1 = 0.0;
-	double value2 = 0.0;
-	double value3 = 0.0;
-	double smallest = 0.0;
+	float pivot = 0.0;
+	float value1 = 0.0;
+	float value2 = 0.0;
+	float value3 = 0.0;
+	float smallest = 0.0;
 	int count = 0;
 	do{
 		// Find our pivot column
@@ -127,20 +164,58 @@ void linprog(double* c, double* A, double* b, double* x, int row_a, int column_a
 
 	}while(entry < 0); // Continue if we have still negative entries
 
-	// Now when we have shaped our tableau. Let's find the optimal solution. Sum the columns
-	for(int i = 0; i < column_a; i++){
-		value1 = 0; // Reset
-		for(int j = 0; j < row_a + 1; j++){
-			value1 += *(tableau + j*(column_a+row_a+2) + i); // Summary
-			value2 = *(tableau + j*(column_a+row_a+2) + i); // If this is 1 then we are on the selected
+	// If max_or_min == 0 -> Maximization problem
+	if(max_or_min == 0){
+		// Now when we have shaped our tableau. Let's find the optimal solution. Sum the columns
+		for(int i = 0; i < column_a; i++){
+			value1 = 0; // Reset
+			for(int j = 0; j < row_a + 1; j++){
+				value1 += *(tableau + j*(column_a+row_a+2) + i); // Summary
+				value2 = *(tableau + j*(column_a+row_a+2) + i); // If this is 1 then we are on the selected
 
-			// Check if we have a value that are very close to 1
-			if(value1 < 1.00001 && value1 > 0.99999 && value2 > 0.99999){
-				*(x + i) = *(tableau + j*(column_a+row_a+2) + (column_a+row_a+2-1));
+				// Check if we have a value that are very close to 1
+				if(value1 < 1 + FLT_EPSILON && value1 > 1 - FLT_EPSILON && value2 > 1 - FLT_EPSILON){
+					*(x + i) = *(tableau + j*(column_a+row_a+2) + (column_a+row_a+2-1));
+				}
 			}
+			//printf("value1 = %f, value2 = %f\n", value1, value2);
+		}
+	}else{
+		// Minimization (The Dual method) - Only take the bottom rows on the slack variables
+		for(int i = 0; i < row_a; i++){
+			*(x + i) = *(tableau + row_a*(column_a+row_a+2) + i + column_a); // We take only the bottom row at start index column_a
 		}
 	}
 
 	//print(tableau,(row_a+1),(column_a+row_a+2));
-
 }
+
+/*
+ * GNU Octave code:
+ *  >> A = [1 2; 1 -4]
+	A =
+
+	   1   2
+	   1  -4
+
+	>> b =  [2; 5]
+	b =
+
+	   2
+	   5
+
+	>> c = A'*b
+	c =
+
+		7
+	  -16
+
+	>> x = glpk(c, A, b, [0;0], [], "UU", "CC", -1) % -1 is for maximize
+	x =
+
+	   2
+	   0
+
+	>>
+
+ */
