@@ -29,6 +29,7 @@ static void opti(double* c, double* A, double* b, double* x, int row_a, int colu
  * 		x >= 0
  *
  * In other words. Swap b and c and take transponse of A
+ * Notice that you can solve Ax = b with constraints on x, just to set c = A^T*b
  *
  * Call this function with the sizes
  * A [m*n] // Matrix
