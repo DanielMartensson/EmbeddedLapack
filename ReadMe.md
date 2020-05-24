@@ -15,6 +15,10 @@ This C-library using Lapack subroutines from Lapack version 3.2.1 and I have cha
 * Simple use for most common matrix algebra
 * Using minimal but necessary Lapack subroutines as possible due to the small amout of flash memory it will be loaded into.
 
+If you looking for a even smaller library, but do the same job (except for imaginary eigenvectors), then CControl will be a good solution for you. CControl is more applied and contains lots of examples such as system identification, path finding, linear algebra, filtering, control engineering, optimization etc.
+
+https://github.com/DanielMartensson/CControl
+
 ## Tested on without any compile errors
 * Windows 7 MinGW 64 bit
 * Ubuntu Linux GCC 64 bit
