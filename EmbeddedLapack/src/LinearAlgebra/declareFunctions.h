@@ -16,6 +16,7 @@
 #include <stdint.h> // For uint8_t and others
 #include <stdio.h>
 #include <math.h>
+#include <float.h>	// required for DBL_EPSILON
 
 
 // This is for qpOASES - If you want red output results or not
