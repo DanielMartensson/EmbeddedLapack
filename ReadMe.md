@@ -19,6 +19,10 @@ If you looking for a even smaller library, but do the same job (except for imagi
 
 https://github.com/DanielMartensson/CControl
 
+## Status of the project
+
+I'm updating this project when I found bugs or when I will add something new. Else, this project works.
+
 ## Tested on without any compile errors
 * Windows 7 MinGW 64 bit
 * Ubuntu Linux GCC 64 bit
