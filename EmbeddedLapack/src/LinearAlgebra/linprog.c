@@ -122,10 +122,12 @@ static void opti(double* c, double* A, double* b, double* x, int row_a, int colu
 		// Find our pivot row
 		pivotRowIndex = 0;
 		value1 = *(tableau + 0*(column_a+row_a+2) + pivotColumIndex); // Value in pivot column
+		if(value1 == 0) value1 = DBL_EPSILON; // Make sure that we don't divide by zero
 		value2 = *(tableau + 0*(column_a+row_a+2) + (column_a+row_a+2-1)); // Value in the b vector
 		smallest = value2/value1; // Initial smallest value
 		for(int i = 1; i < row_a; i++){
 			value1 = *(tableau + i*(column_a+row_a+2) + pivotColumIndex); // Value in pivot column
+			if(value1 == 0) value1 = DBL_EPSILON;
 			value2 = *(tableau + i*(column_a+row_a+2) + (column_a+row_a+2-1)); // Value in the b vector
 			value3 = value2/value1;
 			if( (value3 > 0  && value3 < smallest ) || smallest < 0 ){
