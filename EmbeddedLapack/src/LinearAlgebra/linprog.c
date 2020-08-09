@@ -123,12 +123,12 @@ static void opti(double* c, double* A, double* b, double* x, int row_a, int colu
 		// Find our pivot row
 		pivotRowIndex = 0;
 		value1 = *(tableau + 0*(column_a+row_a+2) + pivotColumIndex); // Value in pivot column
-		if(value1 == 0) value1 = FLT_EPSILON; // Make sure that we don't divide by zero
+		if(value1 == 0) value1 = DBL_EPSILON; // Make sure that we don't divide by zero
 		value2 = *(tableau + 0*(column_a+row_a+2) + (column_a+row_a+2-1)); // Value in the b vector
 		smallest = value2/value1; // Initial smallest value
 		for(int i = 1; i < row_a; i++){
 			value1 = *(tableau + i*(column_a+row_a+2) + pivotColumIndex); // Value in pivot column
-			if(value1 == 0) value1 = FLT_EPSILON;
+			if(value1 == 0) value1 = DBL_EPSILON;
 			value2 = *(tableau + i*(column_a+row_a+2) + (column_a+row_a+2-1)); // Value in the b vector
 			value3 = value2/value1;
 			if( (value3 > 0  && value3 < smallest ) || smallest < 0 ){
@@ -140,7 +140,7 @@ static void opti(double* c, double* A, double* b, double* x, int row_a, int colu
 		// We know where our pivot is. Turn the pivot into 1
 		// 1/pivot * PIVOT_ROW -> PIVOT_ROW
 		pivot = *(tableau + pivotRowIndex*(column_a+row_a+2) + pivotColumIndex); // Our pivot value
-		if(pivot == 0) pivot = FLT_EPSILON;
+		if(pivot == 0) pivot = DBL_EPSILON;
 		//printf("pivotRowIndex = %i, pivotColumIndex = %i, pivot = %f\n", pivotRowIndex, pivotColumIndex, pivot);
 		for(int i = 0; i < (column_a+row_a+2); i++){
 			value1 = *(tableau + pivotRowIndex*(column_a+row_a+2) + i); // Our row value at pivot row
