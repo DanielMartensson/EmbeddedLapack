@@ -9,6 +9,18 @@
 
 /*
  * Find the dot product of two vectors A and B with the same size: row x 1
+ * MATLAB code:
+ * >> A =    [1,2,3,5,8]
+   A =
+	   1   2   3   5   8
+   >> B =  [-3,4,1,5,10]
+   B =
+	   -3    4    1    5   10
+   >> dot(A, B)
+   ans =  113
+   >>
+ *
+ *
  */
 
 double dot(double* A, double* B, int row) {
