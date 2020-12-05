@@ -7,7 +7,7 @@
 #include "declareFunctions.h"
 
 /*
- * Multiply A with size row_a x column_a with matrix B with size row_a x column_b and get matrix C with row_a x column_a
+ * Multiply A with size row_a x column_a with matrix B with size column_a x column_b and get matrix C with row_a x column_b
  */
 
 void mul(double* A, double* B, bool elementWise, double* C, int row_a, int column_a, int column_b) {
