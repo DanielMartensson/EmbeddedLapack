@@ -4,9 +4,9 @@
 ![](https://raw.githubusercontent.com/DanielMartensson/EmbeddedAlgebra/master/Matrix-symbol.png)
 
 ## Introduction
-This is a C-library for linear algebra which are ment to be used for embedded systems such as AVR, PIC, ARM etc. The library is
-easy built and follows as much as it can the MATLAB/Octave "standard", how to compute and solve matrices.
-This C-library using Lapack subroutines from Lapack version 3.2.1 and I have change this Lapack library so it don't require a specific CPU/computer or asking for a operative system. I want this library to have 100% portability.  
+This is a C-library for linear algebra which is meant to be used for embedded systems such as AVR, PIC, ARM etc. The library is
+built easily and follows the MATLAB/Octave "standard" as much as it can when computing and solving matrices.
+This C-library uses Lapack subroutines from Lapack version 3.2.1 and I have changed this Lapack library so it does not require a specific CPU/computer or asking for an operating system. I want this library to have 100% portability.  
 
 * Easy to use in the editor
 * Basic easy code to read if needed
@@ -15,16 +15,16 @@ This C-library using Lapack subroutines from Lapack version 3.2.1 and I have cha
 * Simple use for most common matrix algebra
 * Using minimal but necessary Lapack subroutines as possible due to the small amout of flash memory it will be loaded into.
 
-If you looking for a even smaller library, but do the same job (except for imaginary eigenvectors), then CControl will be a good solution for you. CControl is more applied and contains lots of examples such as system identification, path finding, linear algebra, filtering, control engineering, optimization etc. CControl does not use LAPACK. So CControl fits even smaller microcontrollers. Please fork and star so more people can see CControl. 
+If you are looking for an even smaller library that performs the same job (except for imaginary eigenvectors), then CControl will be a good alternative. CControl is more applied and contains lots of examples such as system identification, path finding, linear algebra, filtering, control engineering, optimization etc. CControl does not use LAPACK therefore it fits even on smaller microcontrollers. Please fork and star so more people can see CControl. 
 
 2023-07-31: This library is now supporting LAPACK for embedded systems.
 https://github.com/DanielMartensson/CControl
 
 ## Status of the project
 
-I'm updating this project when I found bugs or when I will add something new. Else, this project works.
+Support for this project is ongoing and is subject to found bugs or when new features are added otherwise everything on the main branch is currently functional.
 
-## Tested on without any compile errors
+## Tested on the following without any compile errors
 * Windows 7 MinGW 64 bit
 * Ubuntu Linux GCC 64 bit
 * Raspberry Pi B+/Zero W GCC-ARM 32 bit
@@ -37,7 +37,7 @@ Step 1: Download EmbeddedLapack folder
 Step 2: Open EmbeddedLapack and go to Debug folder
 
 Step 3:
-Write this to compile
+Execute this to compile
 ```
 make clean
 make
